@@ -1,6 +1,5 @@
 const router = require("express").Router();
-const contact = require('./ContactController')
-
+const contact = require("./ContactController");
 
 router.post("/add", contact.createContact);
 router.get("/display", contact.displayContact);
