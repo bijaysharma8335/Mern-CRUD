@@ -1,7 +1,7 @@
 const Contact = require("./ContactModel");
 
 const createContact = async (req, res) => {
-  console.log("controller", req.body);
+  // console.log("controller", req.body);
   const { name, email, address, mobile, gender } = req.body;
 
   try {
@@ -52,7 +52,7 @@ const deleteContact = async (req, res) => {
     await Contact.findByIdAndDelete(id);
     const contacts = await Contact.find();
     res.status(200).json(contacts);
-  } catch (error) {}
+  } catch (error) {res.status(400).json(e.message);}
 };
 
 module.exports = { createContact, displayContact, editContact, deleteContact };
