@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { addContact } from "../redux/ContactSlice";
+import { addContact, setContact } from "../redux/ContactSlice";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 const AddContact = () => {
@@ -31,8 +32,13 @@ const AddContact = () => {
     };
     console.log(newContacts);
 
-    dispatch(addContact(newContacts));
+    axios.post("http://localhost:8000/contacts/add", newContacts).then((res)=>{
+      console.log("post-data", res.data);
+      dispatch(setContact(res.data));
     navigate("/")
+    })
+    // dispatch(addContact(newContacts));
+    
   };
 
 

@@ -1,9 +1,19 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import {  setContact } from "../redux/ContactSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 const EditContact = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   console.log(location.state);
 
   const [name, setName] = useState(location.state.name);
@@ -11,6 +21,28 @@ const EditContact = () => {
   const [mobile, setMobile] = useState(location.state.mobile);
   const [address, setAddress] = useState(location.state.address);
   const [gender, setGender] = useState(location.state.gender);
+
+  
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const newContacts = {
+      name,
+      email,
+      mobile,
+      address,
+      gender,
+    };
+    // console.log(newContacts);
+
+    
+    axios.patch(`http://localhost:8000/contacts/update/${location.state._id}`, newContacts).then((res)=>{
+       console.log("ui", res.data);
+       dispatch(setContact(res.data));
+       navigate("/");
+    })
+  }
 
   return (
     <>
@@ -23,7 +55,7 @@ const EditContact = () => {
         <Row>
           <Col md={3}></Col>
           <Col md={6}>
-            <Form>
+            <Form onSubmit={handleUpdate}>
               <Form.Group className='mb-2'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control type='text' value={name} onChange={(e)=> setName(e.target.value)}/>
